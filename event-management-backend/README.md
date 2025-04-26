@@ -57,14 +57,15 @@ npm run dev
 ```
 
 **GET /events/**
-Query Parameters:
-limit (optional): Number of events per page
-skip (optional): Number of events to skip
-sort (optional): Sort by startDate, name
-filter (optional): Filter by event name, startDate range, category Response:
+- Query Parameters<br />
+  limit (optional): Number of events per page<br />
+  skip (optional): Number of events to skip<br />
+  sort (optional): Sort by startDate, name<br />
+  filter (optional): Filter by event name, startDate range, category <br />
 
-**POST /events/**
-form-data
+**POST /events/**<br />
+form-data<br />
+```
 name: My Event
 description: An awesome event!
 startDate: 2025-05-01T00:00:00Z
@@ -73,7 +74,8 @@ location: New York
 totalGuests: 50
 category: Music
 images: Choose a file from your computer (multipart upload).
+```
 
-**GET /events/:id** - Get specific event
-**PUT /events/:id** - Update specific event
-**DELETE /events/:id** - delete specific event
+**GET /events/:id** - Get specific event<br />
+**PUT /events/:id** - Update specific event<br />
+**DELETE /events/:id** - delete specific event<br />
