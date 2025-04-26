@@ -37,3 +37,43 @@ JWT_SECRET=<your-jwt-secret>
 ```
 npm run dev
 ```
+
+### API endpoints
+**POST /auth/signup**
+```
+{
+  "name": "yourname",
+  "email": "youremail@example.com",
+  "password": "yourpassword"
+}
+```
+
+**POST /auth/login**
+```
+{
+  "email": "youremail@example.com",
+  "password": "yourpassword"
+}
+```
+
+**GET /events/**
+Query Parameters:
+limit (optional): Number of events per page
+skip (optional): Number of events to skip
+sort (optional): Sort by startDate, name
+filter (optional): Filter by event name, startDate range, category Response:
+
+**POST /events/**
+form-data
+name: My Event
+description: An awesome event!
+startDate: 2025-05-01T00:00:00Z
+endDate: 2025-05-02T00:00:00Z
+location: New York
+totalGuests: 50
+category: Music
+images: Choose a file from your computer (multipart upload).
+
+**GET /events/:id** - Get specific event
+**PUT /events/:id** - Update specific event
+**DELETE /events/:id** - delete specific event
