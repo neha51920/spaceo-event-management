@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express,{ Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 import { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent } from '../controllers/eventController';
 import { authenticateUser } from '../middlewares/authMiddleware';

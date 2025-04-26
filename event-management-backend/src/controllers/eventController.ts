@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Event from '../models/Event'; // Correct import for the Event model
+import fs from 'fs'
 
 interface MulterRequest extends Request {
   files: Express.Multer.File[];
@@ -9,7 +10,11 @@ interface MulterRequest extends Request {
 export const createEvent = async (req: MulterRequest, res: Response) => {
   try {
     const { name, description, startDate, endDate, location, totalGuests, category } = req.body;
-    const images = req.files?.map(file => file.path) || [];
+
+    const images = req.files?.map(file => {
+      const fileBuffer = fs.readFileSync(file.path); // Read file as buffer
+      return `data:${file.mimetype};base64,${fileBuffer.toString('base64')}`; // Convert to base64 string
+    }) || [];
 
     if (!name || !startDate || !endDate || !location || !totalGuests || !category) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -33,6 +38,7 @@ export const createEvent = async (req: MulterRequest, res: Response) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
 
 // GET All Events
 export const getAllEvents = async (req: Request, res: Response) => {

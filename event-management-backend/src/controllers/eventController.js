@@ -14,12 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEvent = exports.updateEvent = exports.getEventById = exports.getAllEvents = exports.createEvent = void 0;
 const Event_1 = __importDefault(require("../models/Event")); // Correct import for the Event model
+const fs_1 = __importDefault(require("fs"));
 // CREATE Event
 const createEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
         const { name, description, startDate, endDate, location, totalGuests, category } = req.body;
-        const images = ((_a = req.files) === null || _a === void 0 ? void 0 : _a.map(file => file.path)) || [];
+        const images = ((_a = req.files) === null || _a === void 0 ? void 0 : _a.map(file => {
+            const fileBuffer = fs_1.default.readFileSync(file.path); // Read file as buffer
+            return `data:${file.mimetype};base64,${fileBuffer.toString('base64')}`; // Convert to base64 string
+        })) || [];
         if (!name || !startDate || !endDate || !location || !totalGuests || !category) {
             return res.status(400).json({ message: "Missing required fields" });
         }

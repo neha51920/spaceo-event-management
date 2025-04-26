@@ -1,29 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchEvents } from '../redux/eventSlice';
-import { AppDispatch } from '../redux/store';  // Import AppDispatch type
+// pages/EventPage.tsx
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEvents } from "../redux/eventSlice";
+import { AppDispatch } from "../redux/store";
+import EventForm from "../components/EventForm"; // Import EventForm component
 
-// Define the Event type here
 export interface Event {
-    _id: string;
-    name: string;
-    category: string;
-    date: string;
-    description?: string;  // optional
-    image?: string;        // optional
-  }
-  
+  _id: string;
+  name: string;
+  category: string;
+  date: string;
+  description?: string;
+  images?: string;
+}
 
 const EventPage = () => {
-  const dispatch = useDispatch<AppDispatch>();  // Use the correct dispatch type
-  const { events, totalPages, currentPage, loading, error } = useSelector((state: any) => state.events);
+  const dispatch = useDispatch<AppDispatch>();
+  const { events, totalPages, currentPage, loading, error } = useSelector(
+    (state: any) => state.events
+  );
 
-  const [sortBy, setSortBy] = useState<string>('name');  // State for sorting
-  const [category, setCategory] = useState<string>('');  // State for category filter
-  const [page, setPage] = useState<number>(1);  // State for pagination
+  const [sortBy, setSortBy] = useState<string>("name");
+  const [category, setCategory] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
   const limit = 3;
 
-  // Fetch events based on selected page, sort, and category
   useEffect(() => {
     dispatch(fetchEvents({ page, limit, sortBy, category }));
   }, [dispatch, page, limit, sortBy, category]);
@@ -44,6 +45,9 @@ const EventPage = () => {
     <div>
       <h1>Events</h1>
 
+      {/* Include the Create Event Form */}
+      <EventForm />
+
       <div>
         <label htmlFor="sortBy">Sort By:</label>
         <select id="sortBy" onChange={handleSortChange} value={sortBy}>
@@ -53,31 +57,40 @@ const EventPage = () => {
         </select>
       </div>
 
-      {/* Display Loading/Error */}
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
-      {/* Display Event List */}
       <div>
         <ul>
           {events.map((event: Event) => (
-           <li key={event._id}>
-           {event.image && <img src={event.image} alt={event.name} />}
-           <h2>{event.name}</h2>
-           <p>{event.description}</p>
-           <div className="event-details">
-             <span>type : {event.category}</span>
-           </div>
-         </li>
+            <li key={event._id}>
+              {event.images && event.images.length > 0 && (
+                <img
+                  src={event.images[0]}
+                  alt={event.name}
+                  style={{ width: "300px", height: "auto" }}
+                />
+              )}
+              <h2>{event.name}</h2>
+              <p>{event.description}</p>
+              <div className="event-details">
+                <span>type : {event.category}</span>
+              </div>
+            </li>
           ))}
         </ul>
 
-        {/* Pagination Controls */}
         <div>
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage <= 1}
+          >
             Previous
           </button>
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPages}>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+          >
             Next
           </button>
         </div>
